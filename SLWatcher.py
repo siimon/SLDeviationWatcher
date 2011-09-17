@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 from datetime import datetime,timedelta
+import sys
 import SLApi
 import config
 import mailer
@@ -8,6 +9,7 @@ import time
 class SLDeviationWatcher:
   def __init__(self):
     self.devMailer = mailer.Mailer()
+    self.validateConfig()
 
   def run(self):
     nextCheck = datetime(2001,01,01,00,00,00,00)
@@ -15,6 +17,7 @@ class SLDeviationWatcher:
 
     while 1:
       lastTimeToCheck = self.convertStrToTime(config.LAST_TIME_TO_CHECK)
+
 
       if nextCheck.time() > lastTimeToCheck.time():
         dateTomorrow = datetime.now() + timedelta(days=1)
@@ -40,6 +43,31 @@ class SLDeviationWatcher:
     except:
       print 'Error checking deviation'
 
+  def validateConfig(self):
+    print "Checking config. . . . . ."
+    try:
+      if config.LAST_TIME_TO_CHECK is not None and config.FIRST_TIME_TO_CHECK is not None:
+        t = time.strptime(config.LAST_TIME_TO_CHECK,'%H:%M:%S')
+        t2 = time.strptime(config.FIRST_TIME_TO_CHECK,'%H:%M:%S')
+    except:
+      self.printValidateError('Check LAST_TIME_TO_CHECK and FIRST_TIME_TO_CHECK')
+    try:
+      if len(config.DEVIATION_API_KEY)<10:
+       raise()
+    except:
+        self.printValidateError('Check DEVIATION_API_KEY setting')
+    try:
+      if config.TRANSPORT_MODE is None:
+        raise()
+    except:
+      self.printValidateError('Check TRANSPORT_MODE setting')
+
+  def printValidateError(self,msg):
+    print 'Validation of config failed.'
+    print msg
+    sys.exit()
+
+
   def convertStrToTime(self,inp):
     try:
       lastTime = time.strptime(config.LAST_TIME_TO_CHECK,'%H:%M:%S')
@@ -47,6 +75,7 @@ class SLDeviationWatcher:
       return lastTimeToCheck
     except ValueError:
       print 'Error converting to datetime. Input: '+str(inp)
+      return datetime.now()
 
 if(__name__=="__main__"):
   devWatch = SLDeviationWatcher()
