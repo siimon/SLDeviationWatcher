@@ -75,7 +75,7 @@ class SLDeviationWatcher:
 
   def convertStrToTime(self,inp):
     try:
-      lastTime = time.strptime(config.LAST_TIME_TO_CHECK,'%H:%M:%S')
+      lastTime = time.strptime(inp,'%H:%M:%S')
       lastTimeToCheck = datetime(*lastTime[:6])
       return lastTimeToCheck
     except ValueError:
