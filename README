@@ -1,0 +1,10 @@
+This project tracks deviations from SL (Stockholms Länstrafik).
+
+When a new deviation has been detected, an email is sent to configured user.
+
+Requirements:
+Local running smtp server
+Only tested on Python 2.7, might work on other versions aswell..
+An API Key for SLDeviationAPI from traiklab.se (free, though a registered project is required)
+
+If you need to contact me for various reasons, use contact@simoneriksson.org
