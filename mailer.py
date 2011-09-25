@@ -12,6 +12,10 @@ class Mailer:
     print txt
     if config.SEND_ALERT == False:
       return
+
+    if len(txt) <= 0:
+      return
+
     mailText = MIMEText(txt)
     mailText['To'] = config.ALERT_RECEIVER
     mailText['From']= config.ALERT_SENDER
