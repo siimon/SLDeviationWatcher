@@ -8,7 +8,7 @@ class Mailer:
     self.sentDeviations = {}
 
   def sendDeviationResult(self,data):
-    txt = self.createDeviationMsg(data)
+    txt = self.createDeviationMsg(data).encode('utf-8')
     print txt
     if config.SEND_ALERT == False:
       return
