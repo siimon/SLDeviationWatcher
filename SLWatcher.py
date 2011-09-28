@@ -5,6 +5,7 @@ import SLApi
 import config
 import mailer
 import time
+import DeviationToDatabase
 
 class SLDeviationWatcher:
   def __init__(self):
@@ -32,20 +33,31 @@ class SLDeviationWatcher:
         print 'Next check: '+ str(nextCheck)
         print "\n \n \n"
 
+      time.sleep(20)
+
   def checkDeviation(self):
     lines = config.TRANSPORT_LINES
     transportMode = config.TRANSPORT_MODE
     api = SLApi.SLApi()
     try:
       s = api.executeDeviationCall(lines,transportMode)
-
     except:
       print 'Error checking deviation'
 
     try:
+      if s is not None:
+        parser = DeviationToDatabase.DeviationToDatabase()
+        for msg in s['GetDeviationsResponse']['GetDeviationsResult']['aWCFDeviation']:
+          parser.parseMessage(msg['aDetails'])
+
+    except Exception,e:
+      print 'Error parsing deviation'
+      print e
+    try:
       self.devMailer.sendDeviationResult(s)
-    except:
+    except Exception,e:
       print 'Error sending alert'
+      print 'Exception: '+e
 
   def validateConfig(self):
     print "Checking config. . . . . ."
