@@ -2,7 +2,7 @@
 DEVIATION_API_KEY = ""
 
 #Different kinds of transport modes, can not be None.
-#Available params: metro, ?? , ?? , ??
+#Available params: metro, tram, bus, train
 TRANSPORT_MODE = 'metro'
 
 #Comma seperated lists of lines you want to track.
