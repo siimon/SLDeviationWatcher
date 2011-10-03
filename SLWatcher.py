@@ -11,6 +11,7 @@ class SLDeviationWatcher:
   def __init__(self):
     self.devMailer = mailer.Mailer()
     self.validateConfig()
+    self.deviations = {}
 
   def run(self):
     nextCheck = datetime(2001,01,01,00,00,00,00)
@@ -41,23 +42,37 @@ class SLDeviationWatcher:
     api = SLApi.SLApi()
     try:
       s = api.executeDeviationCall(lines,transportMode)
-    except:
+    except Exception,e:
       print 'Error checking deviation'
-
+      print 'Exception: '+str(e)
+    if s is not None:
+     self.storeDeviations(s)
+     self.sendDeviations(s)
+  
+  def sendDeviations(self,data):
     try:
-      if s is not None:
+      toSend = []
+      for deviation in data:
+        if deviation['Guid'] not in self.deviations:
+          toSend.append(deviation)
+          self.deviations[deviation['Guid']] = deviation['Header']
+
+      self.devMailer.sendDeviationResult(toSend)
+    except Exception,e:
+      print 'Error sending alert'
+      print 'Exception: '+e
+  
+  def storeDeviations(self,data):
+    try:
+      if config.SAVE_DEVIATION is True:
         parser = DeviationToDatabase.DeviationToDatabase()
-        for msg in s['GetDeviationsResponse']['GetDeviationsResult']['aWCFDeviation']:
-          parser.parseMessage(msg['aDetails'])
+        for deviation in data:
+          if deviation['Guid'] not in self.deviations:
+           parser.parseMessage(deviation['Details'])
 
     except Exception,e:
       print 'Error parsing deviation'
       print e
-    try:
-      self.devMailer.sendDeviationResult(s)
-    except Exception,e:
-      print 'Error sending alert'
-      print 'Exception: '+e
 
   def validateConfig(self):
     print "Checking config. . . . . ."

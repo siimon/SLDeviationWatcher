@@ -4,9 +4,6 @@ import config
 from email.mime.text import MIMEText
 
 class Mailer:
-  def __init__(self):
-    self.sentDeviations = {}
-
   def sendDeviationResult(self,data):
     txt = self.createDeviationMsg(data).encode('utf-8')
     print txt
@@ -26,13 +23,9 @@ class Mailer:
 
   def createDeviationMsg(self,data):
     txt = ''
-    print 'SentDev len: '+str(len(self.sentDeviations))
-    for deviation in data["GetDeviationsResponse"]["GetDeviationsResult"]["aWCFDeviation"]:
-      if deviation['aDevCaseGid'] not in self.sentDeviations:
-        txt+= deviation['aHeader'] + "\n"
-        txt+= deviation['aDetails'] + "\n"
-        txt+= deviation['aUpdated'] + "\n \n"
-        self.sentDeviations[deviation['aDevCaseGid']] = deviation['aHeader']
-    print 'SentDev len: '+ str(len(self.sentDeviations))
+    for deviation in data:
+        txt+= deviation['Header'] + "\n"
+        txt+= deviation['Details'] + "\n"
+        txt+= deviation['Updated'] + "\n \n"
     return txt
 

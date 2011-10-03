@@ -14,4 +14,11 @@ class SLApi:
 
     apiData = urllib.urlopen(url).read()
     jsonData = json.loads(apiData)
-    return jsonData
+    result = self.mapDeviationResult(jsonData)
+    return result
+
+  def mapDeviationResult(self,response):
+    result = []
+    for deviation in  response["GetDeviationsResponse"]["GetDeviationsResult"]["aWCFDeviation"]:
+      result.append({'Guid':deviation['aDevCaseGid'],'Header':deviation['aHeader'],'Details':deviation['aDetails'],'Updated':deviation['aUpdated']})
+    return result

@@ -3,8 +3,6 @@ import config
 
 class MySQLHelper:
   def __init__(self):
-    m = MySQLSettings()
-    conn = m.getConnectionData()
     self.db = MySQLdb.connect(config.MYSQL_HOST,config.MYSQL_USER,config.MYSQL_PASSWORD,config.MYSQL_DATABASE)
   def selectFromDB(self,query):
     cursor = self.db.cursor()
