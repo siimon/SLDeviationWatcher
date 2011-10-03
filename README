@@ -7,4 +7,7 @@ Local running smtp server
 Only tested on Python 2.7, might work on other versions aswell..
 An API Key for SLDeviationAPI from traiklab.se (free, though a registered project is required)
 
+Other features:
+Possible to store each deviation, with reason and time.
+  
 If you need to contact me for various reasons, use contact@simoneriksson.org
