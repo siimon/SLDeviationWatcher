@@ -60,7 +60,7 @@ class SLDeviationWatcher:
       self.devMailer.sendDeviationResult(toSend)
     except Exception,e:
       print 'Error sending alert'
-      print 'Exception: '+e
+      print 'Exception: '+str(e)
   
   def storeDeviations(self,data):
     try:
@@ -72,7 +72,7 @@ class SLDeviationWatcher:
 
     except Exception,e:
       print 'Error parsing deviation'
-      print e
+      print str(e)
 
   def validateConfig(self):
     print "Checking config. . . . . ."

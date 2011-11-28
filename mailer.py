@@ -5,7 +5,9 @@ from email.mime.text import MIMEText
 
 class Mailer:
   def sendDeviationResult(self,data):
-    txt = self.createDeviationMsg(data).encode('utf-8')
+    if data == None:
+      return
+    txt = self.createDeviationMsg(data)
     print txt
     if config.SEND_ALERT == False:
       return
@@ -24,8 +26,13 @@ class Mailer:
   def createDeviationMsg(self,data):
     txt = ''
     for deviation in data:
-        txt+= deviation['Header'] + "\n"
-        txt+= deviation['Details'] + "\n"
-        txt+= deviation['Updated'] + "\n \n"
+        header = deviation['Header']
+        details = deviation['Details']
+        updated = deviation['Updated']
+        
+        if header != None and details != None and updated != None:
+          txt+= deviation['Header'].encode('utf-8') + "\n"
+          txt+= deviation['Details'].encode('utf-8') + "\n"
+          txt+= deviation['Updated'].encode('utf-8') + "\n \n"
     return txt
 
