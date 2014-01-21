@@ -41,6 +41,7 @@ class SLDeviationWatcher:
     lines = config.TRANSPORT_LINES
     transportMode = config.TRANSPORT_MODE
     api = SLApi.SLApi()
+    s = None
     try:
       s = api.executeDeviationCall(lines,transportMode)
     except Exception,e:
