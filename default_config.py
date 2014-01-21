@@ -1,5 +1,5 @@
 #API Key from trafiklab.se
-DEVIATION_API_KEY = ""
+DEVIATION_API_KEY = "6834613731213fe72d269d4a34d1bb55"
 
 #Different kinds of transport modes, can not be None.
 #Available params: metro, tram, bus, train
