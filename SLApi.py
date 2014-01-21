@@ -20,5 +20,5 @@ class SLApi:
   def mapDeviationResult(self,response):
     result = []
     for deviation in  response["GetDeviationsResponse"]["GetDeviationsResult"]["aWCFDeviation"]:
-      result.append({'Guid':deviation['aDevCaseGid'],'Header':deviation['aHeader'],'Details':deviation['aDetails'],'Updated':deviation['aUpdated']})
+      result.append({'Guid':deviation['aDevCaseGid'],'Header':deviation['aHeader'],'Details':deviation['aDetails'],'Updated':deviation['aUpdated'], 'Main': deviation['aMainNews']})
     return result

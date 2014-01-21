@@ -6,6 +6,7 @@ import config
 import mailer
 import time
 import DeviationToDatabase
+import pushover_client
 
 class SLDeviationWatcher:
   def __init__(self):
@@ -50,17 +51,22 @@ class SLDeviationWatcher:
      self.sendDeviations(s)
   
   def sendDeviations(self,data):
+    toSend = []
+    for deviation in data:
+      if deviation['Guid'] not in self.deviations:
+        toSend.append(deviation)
+        self.deviations[deviation['Guid']] = deviation['Header']
     try:
-      toSend = []
-      for deviation in data:
-        if deviation['Guid'] not in self.deviations:
-          toSend.append(deviation)
-          self.deviations[deviation['Guid']] = deviation['Header']
-
       self.devMailer.sendDeviationResult(toSend)
     except Exception,e:
       print 'Error sending alert'
       print 'Exception: '+str(e)
+
+    try:
+      self.sendPushNotice(toSend)
+    except Exception, e:
+      print 'Error sending push notice'
+      print e
   
   def storeDeviations(self,data):
     try:
@@ -73,6 +79,13 @@ class SLDeviationWatcher:
     except Exception,e:
       print 'Error parsing deviation'
       print str(e)
+
+  def sendPushNotice(self, data):
+    for deviation in data:
+      print deviation['Main']
+      if deviation['Main'] == 'true':
+        pushover_client.send(deviation['Details'].encode('utf-8'))
+
 
   def validateConfig(self):
     print "Checking config. . . . . ."

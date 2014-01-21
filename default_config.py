@@ -41,3 +41,13 @@ MYSQL_PASSWORD = ''
 #MySQL Database
 MYSQL_DATABASE = 'SLDeviation'
 
+#PushOver integration, create a free account on pushover.net
+#Enable notifications, send on major disruptions only
+PUSHOVER_SEND_PUSH_NOTIFICATIONS = True
+
+#PushOver user key 
+PUSHOVER_USER_KEY = ''
+
+#PushOver app key for this application
+PUSHOVER_APP_KEY = ''
+
