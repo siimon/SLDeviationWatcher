@@ -15,7 +15,7 @@ class Mailer:
     if len(txt) <= 0:
       return
 
-    mailText = MIMEText(txt)
+    mailText = MIMEText(txt, _charset='utf-8')
     mailText['To'] = config.ALERT_RECEIVER
     mailText['From']= config.ALERT_SENDER
     mailText['Subject'] = 'Deviation from SL!'
