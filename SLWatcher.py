@@ -84,7 +84,7 @@ class SLDeviationWatcher:
   def sendPushNotice(self, data):
     for deviation in data:
       print deviation['Main']
-      if deviation['Main'] == 'true':
+      if deviation['Main'] == 'true' or 'stopp vid' in deviation['Details']:
         pushover_client.send(deviation['Details'].encode('utf-8'))
 
 
