@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+
 from datetime import datetime,timedelta
 import sys
 import SLApi
@@ -19,21 +20,17 @@ class SLDeviationWatcher:
     print "Next check: "+  str(nextCheck)
 
     while 1:
-      lastTimeToCheck = self.convertStrToTime(config.LAST_TIME_TO_CHECK)
+      for interval in config.INTERVAL_TIMES:
+        start = self.convertStrToTime(interval['start'])
+        stop = self.convertStrToTime(interval['stop'])
+        now = datetime.now().time()
 
-
-      if nextCheck.time() > lastTimeToCheck.time():
-        dateTomorrow = datetime.now() + timedelta(days=1)
-        nextTime = self.convertStrToTime(config.FIRST_TIME_TO_CHECK)
-        nextCheck = datetime(dateTomorrow.year,dateTomorrow.month,dateTomorrow.day,nextTime.hour,nextTime.minute,nextTime.second)
-        print 'Max time for today reached, next check is: '+str(nextCheck)
-
-      if nextCheck <= datetime.now():
-        print 'Time to check deviation, time: '+str(datetime.now())
-        self.checkDeviation()
-        nextCheck = datetime.now() + timedelta(minutes=5)
-        print 'Next check: '+ str(nextCheck)
-        print "\n \n \n"
+        if now >= start.time() and now <= stop.time() and nextCheck <= datetime.now():
+          print 'Time to check deviation, time: '+str(datetime.now())
+          self.checkDeviation()
+          nextCheck = datetime.now() + timedelta(minutes=5)
+          print 'Next check: '+ str(nextCheck)
+          print "\n"
 
       time.sleep(20)
 
@@ -91,11 +88,11 @@ class SLDeviationWatcher:
   def validateConfig(self):
     print "Checking config. . . . . ."
     try:
-      if config.LAST_TIME_TO_CHECK is not None and config.FIRST_TIME_TO_CHECK is not None:
-        t = time.strptime(config.LAST_TIME_TO_CHECK,'%H:%M:%S')
-        t2 = time.strptime(config.FIRST_TIME_TO_CHECK,'%H:%M:%S')
+      if len(config.INTERVAL_TIMES) <= 0:
+        raise()
     except:
-      self.printValidateError('Check LAST_TIME_TO_CHECK and FIRST_TIME_TO_CHECK')
+      self.printValidateError('Check INTERVAL_TIMES setting')
+
     try:
       if len(config.DEVIATION_API_KEY)<10:
        raise()

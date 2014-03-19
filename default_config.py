@@ -9,13 +9,8 @@ TRANSPORT_MODE = 'metro'
 #Possible to be None
 TRANSPORT_LINES = None
 
-#Don't check deviation after this hour
-#Expected format: HH:MM:SS
-LAST_TIME_TO_CHECK = '23:00:00'
-
-#Time to start again if you have stopped watching after a certain hour
-#Expected format: HH:MM:SS
-FIRST_TIME_TO_CHECK = '06:00:00'
+#Array of start and stop times, only check for deviations between these intervals
+INTERVAL_TIMES = [ { 'start':'07:00:00', 'stop': '09:00:00' }, { 'start': '15:00:00', 'stop':'18:00:00' } ]
 
 #Send email alerts
 SEND_ALERT = True 
